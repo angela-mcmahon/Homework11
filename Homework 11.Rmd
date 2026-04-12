@@ -1,0 +1,35 @@
+---
+title: "Homework 11"
+author: "Angela McMahon"
+date: "4/12/2026"
+output: 
+  html_document: 
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(nycflights13)
+library(dplyr)
+library(knitr)
+data(flights)
+```
+
+
+```{r}
+flight_count <-flights%>%
+  count(origin, dest)
+flight_count%>%
+  head(n=6)%>%
+  kable()
+```
+
+
+
+```{r}
+flight_count%>%
+  left_join(airports, join_by(origin== faa))%>%
+  rename(origin_lat= lat, origin_long= lon)%>%
+  relocate(origin_lat, origin_long, .after=origin)
+```
+
