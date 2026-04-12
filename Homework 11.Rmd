@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(nycflights13)
 library(dplyr)
 library(knitr)
+library(maps)
+library(ggplot2)
 data(flights)
 ```
 
@@ -27,9 +29,47 @@ flight_count%>%
 
 
 ```{r}
-flight_count%>%
-  left_join(airports, join_by(origin== faa))%>%
+flight_ap <- flight_count%>%
+  left_join(airports%>%select(faa, lat, lon), join_by(origin== faa))%>%
   rename(origin_lat= lat, origin_long= lon)%>%
   relocate(origin_lat, origin_long, .after=origin)
+flight_ap%>%
+  head(n=6)%>%
+  kable()
+```
+
+
+```{r}
+flight_ap2 <-flight_ap%>%
+  left_join(airports%>%select(faa, lat, lon), join_by(dest==faa))%>%
+  rename(dest_lat=lat, dest_long=lon)%>%
+  relocate(dest_lat, dest_long, .after=dest)
+
+flight_ap2%>%
+  head(n=6)%>%
+  kable()
+```
+
+```{r}
+ggplot() +
+geom_polygon(
+data = map_data("state") ,
+mapping = aes(x = long, y = lat, group = group),
+fill = NA, color = "gray"
+) +
+coord_fixed(1.3)+geom_segment(data = flight_ap2, mapping = aes(x=origin_long, y=origin_lat, xend=dest_long, yend=dest_lat), alpha=0.3)
+```
+
+
+```{r}
+flights_map <- flight_ap2%>%
+  filter(dest_long>-130)
+ggplot() +
+geom_polygon(
+data = map_data("state") ,
+mapping = aes(x = long, y = lat, group = group),
+fill = NA, color = "gray"
+) +
+coord_fixed(1.3)+geom_segment(data = flights_map, mapping = aes(x=origin_long, y=origin_lat, xend=dest_long, yend=dest_lat), alpha=0.3)
 ```
 
