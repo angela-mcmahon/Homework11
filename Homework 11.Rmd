@@ -18,6 +18,8 @@ data(flights)
 ```
 
 
+
+### Frequency Table of all Origin/Destination Pais 
 ```{r}
 flight_count <-flights%>%
   count(origin, dest)
@@ -25,8 +27,11 @@ flight_count%>%
   head(n=6)%>%
   kable()
 ```
+Using the flights data set, counted the origin and destination pairs. Displayed frequency table of first 6 rows. 
+^[Question 1 completed.]
 
 
+### Joining Flights and Airports Data sets by Origin Lat. and Long. 
 
 ```{r}
 flight_ap <- flight_count%>%
@@ -36,8 +41,13 @@ flight_ap <- flight_count%>%
 flight_ap%>%
   head(n=6)%>%
   kable()
+
+flight_count%>%
+  
 ```
 
+
+### Joining Flights and Aiports by Destination Lat. and Long. 
 
 ```{r}
 flight_ap2 <-flight_ap%>%
@@ -50,6 +60,23 @@ flight_ap2%>%
   kable()
 ```
 
+
+### Map of the United States 
+
+```{r}
+ggplot() +
+geom_polygon(
+data = map_data("state") ,
+mapping = aes(x = long, y = lat, group = group),
+fill = NA, color = "gray"
+) +
+coord_fixed(1.3)
+```
+Imported map. 
+^[Question 4 completed.]
+
+### Map of the United States with Flight Origins to Destinations
+
 ```{r}
 ggplot() +
 geom_polygon(
@@ -60,6 +87,10 @@ fill = NA, color = "gray"
 coord_fixed(1.3)+geom_segment(data = flight_ap2, mapping = aes(x=origin_long, y=origin_lat, xend=dest_long, yend=dest_lat), alpha=0.3)
 ```
 
+Previous map, layered with the flight frequency table that includes all origin and destination latitudes and longitudes. We can see the flights that leave the US have a destination on the left of the plot. We can see the color is heavily concentrated on the East coast indicating most flights are going along that path. 
+^[Question 5 completed.]
+
+### Map of U.S. FLight Patters with only Destinations in the Country 
 
 ```{r}
 flights_map <- flight_ap2%>%
@@ -72,4 +103,7 @@ fill = NA, color = "gray"
 ) +
 coord_fixed(1.3)+geom_segment(data = flights_map, mapping = aes(x=origin_long, y=origin_lat, xend=dest_long, yend=dest_lat), alpha=0.3)
 ```
+
+Removed the flights that have a destination outside of the United States. Displayed the new map. Now we can better see the distribution of flights across the United States. The flights are still heavily concentrated on the East Coast. But we can also see specific states have a higher frequency of flights landing at them then others. 
+^[Question 6 completed.]
 
