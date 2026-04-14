@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 library(nycflights13)
 library(dplyr)
 library(knitr)
@@ -19,7 +19,7 @@ data(flights)
 
 
 
-### Frequency Table of all Origin/Destination Pais 
+### Frequency Table of all Origin/Destination Pairs 
 ```{r}
 flight_count <-flights%>%
   count(origin, dest)
@@ -41,11 +41,11 @@ flight_ap <- flight_count%>%
 flight_ap%>%
   head(n=6)%>%
   kable()
-
-flight_count%>%
   
 ```
 
+Left joined the previously stored data set with the airports data set. Inside of this selected only the latitude, longitude, and faa columns from the airports data set. Joined the data sets by origin which is also faa in airports. Renamed latitude and longitude to specify as origin latitude and origin longitude. Relocated both the lat. and long. columns to be after the origin column. Stored this, then displayed the first 6 rows of the data set as a table. 
+^[Question 2 completed.]
 
 ### Joining Flights and Aiports by Destination Lat. and Long. 
 
@@ -60,6 +60,8 @@ flight_ap2%>%
   kable()
 ```
 
+Took the stored, joined data and left joined this with the airports data set again. However, after selecting for lat., long., and faa, we joined by destination equal to faa. Once again renamed to be representative of destination lat. and destination long. Relocated the columns to be after the destination column. After storing this, displayed a table of the first 6 rows. 
+^[Question 3 completed.]
 
 ### Map of the United States 
 
@@ -72,7 +74,8 @@ fill = NA, color = "gray"
 ) +
 coord_fixed(1.3)
 ```
-Imported map. 
+
+Imported map of United States.  
 ^[Question 4 completed.]
 
 ### Map of the United States with Flight Origins to Destinations
